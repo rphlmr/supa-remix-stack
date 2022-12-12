@@ -22,7 +22,7 @@
     "@remix-run/react": "*",
     "@remix-run/vercel": "*",
     "@supabase/auth-helpers-remix": "^0.1.3",
-    "@supabase/supabase-js": "*",
+    "@supabase/supabase-js": "^2.1.3",
     "@vercel/node": "^2.6.2",
     "isbot": "^3.6.5",
     "npm": "^9.1.2",
