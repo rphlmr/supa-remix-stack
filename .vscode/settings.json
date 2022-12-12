@@ -1,0 +1,7 @@
+{
+  "tailwindCSS.experimental.classRegex": [
+    // Help Tailwind intellisense to parse Tailwind classes outside of className, when using twMerge
+    // Require https://marketplace.visualstudio.com/items?itemName=bradlc.vscode-tailwindcss
+    ["twMerge\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+  ]
+}
