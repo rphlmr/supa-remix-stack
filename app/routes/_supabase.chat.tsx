@@ -1,10 +1,10 @@
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { redirect, json } from "@remix-run/node";
 import { Form, Outlet, useLoaderData } from "@remix-run/react";
 
 import { requireSession } from "~/supabase";
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const { supabase, headers } = await requireSession(request);
 
   const { error } = await supabase.auth.signOut();
@@ -16,7 +16,7 @@ export async function action({ request }: ActionArgs) {
   return redirect("/", { headers });
 }
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { session, headers } = await requireSession(request);
 
   return json({ user: session.user }, { headers });
@@ -24,6 +24,7 @@ export async function loader({ request }: LoaderArgs) {
 
 export default function AuthenticatedLayout() {
   const { user } = useLoaderData<typeof loader>();
+
   return (
     <div>
       <h1>Authenticated Layout</h1>

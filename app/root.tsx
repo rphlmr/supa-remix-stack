@@ -1,4 +1,3 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
   LiveReload,
@@ -6,15 +5,11 @@ import {
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
+import { json, type LinksFunction } from "@vercel/remix";
 
 import tailwindStylesheetUrl from "./styles/tailwind.css";
-
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "Supa Remix Stack",
-  viewport: "width=device-width,initial-scale=1",
-});
 
 export const links: LinksFunction = () => [
   {
@@ -24,10 +19,27 @@ export const links: LinksFunction = () => [
   },
 ];
 
+export function loader() {
+  return json({
+    env: {
+      SUPABASE_URL: process.env.SUPABASE_URL!,
+      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY!,
+    },
+  });
+}
+
 export default function App() {
+  const { env } = useLoaderData<typeof loader>();
+
   return (
     <html lang="en" className="h-full bg-neutral-50">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="title" content="Supa Remix Stack" />
+        <meta
+          name="viewport"
+          content="width=device-width,initial-scale=1.0,maximum-scale=1.0"
+        />
         <Meta />
         <Links />
       </head>
@@ -36,6 +48,11 @@ export default function App() {
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.env = ${JSON.stringify(env)}`,
+          }}
+        />
       </body>
     </html>
   );

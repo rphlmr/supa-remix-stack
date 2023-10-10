@@ -3,7 +3,7 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[]
 
 export interface Database {
@@ -11,35 +11,43 @@ export interface Database {
     Tables: {
       messages: {
         Row: {
+          content: string
+          created_at: string
           id: string
           user_id: string
-          created_at: string
-          content: string
         }
         Insert: {
+          content: string
+          created_at?: string
           id?: string
           user_id?: string
-          created_at?: string
-          content: string
         }
         Update: {
+          content?: string
+          created_at?: string
           id?: string
           user_id?: string
-          created_at?: string
-          content?: string
         }
+        Relationships: [
+          {
+            foreignKeyName: "messages_user_id_fkey"
+            columns: ["user_id"]
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          }
+        ]
       }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      install_available_extensions_and_test: {
-        Args: Record<PropertyKey, never>
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
       [_ in never]: never
     }
   }
