@@ -1,16 +1,17 @@
-import type { Session, SupabaseClient } from "@supabase/auth-helpers-remix";
+export {};
 
 declare global {
   interface Window {
     env: {
-      SUPABASE_URL: string | undefined;
-      SUPABASE_ANON_KEY: string | undefined;
-      SERVER_URL: string | undefined;
+      SUPABASE_URL: string;
+      SUPABASE_ANON_KEY: string;
+      SERVER_URL: string;
     };
   }
+  namespace NodeJS {
+    interface ProcessEnv {
+      SUPABASE_URL: string;
+      SUPABASE_ANON_KEY: string;
+    }
+  }
 }
-
-export type SupabaseContext = {
-  supabase: SupabaseClient;
-  session: Session | null;
-} | null;

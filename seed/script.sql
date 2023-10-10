@@ -1,16 +1,19 @@
-create table if not exists messages (
-    id uuid default uuid_generate_v4() primary key,
-    user_id uuid references auth.users not null default(auth.uid()),
-    created_at timestamp with time zone default timezone('utc'::text, now()) not null,
-    content text not null
+CREATE TABLE IF NOT EXISTS messages (
+    id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+    user_id uuid REFERENCES auth.users NOT NULL DEFAULT(auth.uid()),
+    created_at timestamp WITH time zone DEFAULT timezone('utc'::text, NOW()) NOT NULL,
+    content text NOT NULL
 );
 
-alter table public.messages ENABLE row level security;
+ALTER TABLE public.messages ENABLE ROW LEVEL SECURITY;
 
-create policy "authenticated users can read messages" on "public"."messages" as permissive for
-select to authenticated using (true);
+CREATE policy "authenticated users can read messages" ON "public"."messages" AS permissive FOR
+SELECT TO authenticated USING (TRUE);
 
-create policy "users can insert their own messages" on "public"."messages" as permissive for
-insert to authenticated with check (user_id = auth.uid());
+CREATE policy "users can insert their own messages" ON "public"."messages" AS permissive FOR
+INSERT TO authenticated WITH CHECK (user_id = auth.uid());
 
-alter table public.messages replica identity full;
+ALTER TABLE public.messages replica identity FULL;
+
+ALTER publication supabase_realtime
+ADD TABLE "public"."messages";

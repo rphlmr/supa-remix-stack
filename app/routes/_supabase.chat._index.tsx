@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
-import type { ActionArgs, LoaderArgs } from "@remix-run/node";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, useLoaderData, useOutletContext } from "@remix-run/react";
+import { Form, useLoaderData } from "@remix-run/react";
 
-import type { Database, SupabaseContext } from "~/supabase";
-import { requireSession } from "~/supabase";
+import type { Database } from "~/supabase";
+import { requireSession, supabase } from "~/supabase";
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const { headers, supabase } = await requireSession(request);
 
   const { message } = Object.fromEntries(await request.formData());
@@ -23,7 +23,7 @@ export async function action({ request }: ActionArgs) {
   return json(null, { headers });
 }
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const { headers, supabase } = await requireSession(request);
 
   const { data } = await supabase.from("messages").select();
@@ -51,7 +51,6 @@ type Message = Database["public"]["Tables"]["messages"]["Row"];
 
 function RealtimeMessages({ serverMessages }: { serverMessages: Message[] }) {
   const [messages, setMessages] = useState(serverMessages);
-  const { supabase } = useOutletContext<SupabaseContext>() || {};
 
   useEffect(() => {
     setMessages(serverMessages);
@@ -69,7 +68,7 @@ function RealtimeMessages({ serverMessages }: { serverMessages: Message[] }) {
           if (!messages.find((message) => message.id === newMessage.id)) {
             setMessages([...messages, newMessage]);
           }
-        }
+        },
       )
       .subscribe();
 
@@ -78,7 +77,7 @@ function RealtimeMessages({ serverMessages }: { serverMessages: Message[] }) {
         supabase?.removeChannel(channel);
       }
     };
-  }, [supabase, messages, setMessages]);
+  }, [messages, setMessages]);
 
   return <pre>{JSON.stringify(messages, null, 2)}</pre>;
 }

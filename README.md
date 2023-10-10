@@ -74,6 +74,8 @@ Run `seed/script.sql` in your Supabase project SQL editor.
 supabase gen types typescript --project-id your_project_id > app/supabase/db_types.ts
 ```
 
+## Configure GitHub Auth
+Follow the [Supabase guide](https://supabase.com/docs/guides/auth/social-login/auth-github)
 
 ### DIY
 
