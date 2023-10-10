@@ -1,4 +1,4 @@
-import type { Session, SupabaseClient } from "@supabase/auth-helpers-remix";
+export {};
 
 declare global {
   interface Window {

@@ -57,8 +57,6 @@ function RealtimeMessages({ serverMessages }: { serverMessages: Message[] }) {
   }, [serverMessages]);
 
   useEffect(() => {
-    // supabase?.realtime.setAuth(session.access_token);
-
     const channel = supabase
       ?.channel("*")
       .on(
